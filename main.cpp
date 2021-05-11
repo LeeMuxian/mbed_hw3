@@ -102,6 +102,7 @@ int gesture_index;
 constexpr int kTensorArenaSize = 60 * 1024;
 uint8_t tensor_arena[kTensorArenaSize];
 
+const char* topic = "Mbed";
 const char* topic1 = "Mbed/Threshold";
 const char* topic2 = "Mbed/angle_detected";
 
@@ -171,6 +172,11 @@ int main()
         printf("Fail to subscribe for topic 2\r\n");
         return -1;
     }
+    int num = 0;
+    while (num != 5) {
+            client.yield(100);
+            ++num;
+    }
     // ------------------ end of connection -----------------------
 
     char buf[256], outbuf[256]; // for RPC call
@@ -191,6 +197,16 @@ int main()
         printf("%s\r\n", outbuf);
     }
 
+    printf("Ready to close MQTT Network......\n");
+    if ((rc = client.unsubscribe(topic1)) != 0) {
+        printf("Failed: rc from unsubscribe was %d\n", rc);
+    }
+    if ((rc = client.unsubscribe(topic2)) != 0) {
+        printf("Failed: rc from unsubscribe was %d\n", rc);
+    }
+    if ((rc = client.disconnect()) != 0) {
+        printf("Failed: rc from disconnect was %d\n", rc);
+    }
     mqttNetwork.disconnect();
     printf("Successfully closed!\n");
     return 0;
