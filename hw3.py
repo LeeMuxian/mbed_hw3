@@ -25,21 +25,22 @@ def on_connect(self, mosq, obj, rc):
 num_tilt = 0
 def on_message(mosq, obj, msg):
     global num_tilt
-    if len(str(msg.payload)) < 40:
+    if len(str(msg.payload)) < 25 and len(str(msg.payload)) > 15:
         num_tilt = 0
         print("[Received] Topic: " + msg.topic + ", Message: " + str(msg.payload) + "\n")
-        s.write(bytes("\r", 'UTF-8'))
+        s.write(bytes("\r\n", 'UTF-8'))
         time.sleep(1)
         s.write(bytes("/mode_stop/run\r\n", 'UTF-8'))
-        time.sleep(2)
-    elif len(str(msg.payload)) >= 40 :
+        time.sleep(1)
+    elif len(str(msg.payload)) <= 10 :
         if num_tilt == 9 :
             print("[Received] Topic: " + msg.topic + ", Message: " + str(msg.payload) + "\n")
             num_tilt = 0
-            s.write(bytes("\r", 'UTF-8'))
+            s.write(bytes("\r\n", 'UTF-8'))
             time.sleep(1)
             s.write(bytes("/mode_stop/run\r\n", 'UTF-8'))
-            time.sleep(2)
+            time.sleep(1)
+            num_tilt = 0
         else :
             print("[Received] Topic: " + msg.topic + ", Message: " + str(msg.payload) + "\n")
             num_tilt = num_tilt + 1

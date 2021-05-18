@@ -194,7 +194,7 @@ int main()
             buf[i] = fputc(recv, devout);
         }
         RPC::call(buf, outbuf);
-        printf("%s\r\n", outbuf);
+        printf("\r\n%s\r\n", outbuf);
     }
 
     printf("Ready to close MQTT Network......\n");
@@ -359,7 +359,7 @@ void threshold_select(void) {
 void publish_Threshold(MQTT::Client<MQTTNetwork, Countdown>* client) {
     MQTT::Message message;
     char buff[100];
-    sprintf(buff, "The threshold angle is %d", Threshold_angle);
+    sprintf(buff, "ThresholdAngle %d", Threshold_angle);
     message.qos = MQTT::QOS0;
     message.retained = false;
     message.dup = false;
@@ -451,7 +451,7 @@ void thread_angle(void) {
 void publish_tilt(MQTT::Client<MQTTNetwork, Countdown>* client, double angle) {
     MQTT::Message message;
     char buff[100];
-    sprintf(buff, "The tilt angle over the threshold one is %lf", angle);
+    sprintf(buff, "%lf", angle);
     message.qos = MQTT::QOS0;
     message.retained = false;
     message.dup = false;
